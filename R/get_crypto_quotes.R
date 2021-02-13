@@ -54,4 +54,3 @@ get_crypto_quotes <- function(crypto_id = 1, currency = 'USD', interval = '1h',
   return(data.table::rbindlist(market_data))
 }
 
-x <- get_crypto_quotes(78, 'USD','1h', time_start = as.Date('2015-01-01'), time_end = Sys.Date())
