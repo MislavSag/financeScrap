@@ -15,7 +15,7 @@ get_crypto_quotes <- function(crypto_id = 1, currency = 'USD', interval = '1h',
 
   # check if date interval is greater than 1 y. If yeas, make sequence
   if ((time_end - time_start) > 365) {
-    time_start <- seq.Date(time_start, time_end, by = 365)
+    time_start <- seq.Date(time_start, time_end, by = 200)
     time_end <- c(time_start[-1], time_end)
     time_start <- as.POSIXct(time_start)
     time_end <- as.POSIXct(time_end)
@@ -37,7 +37,7 @@ get_crypto_quotes <- function(crypto_id = 1, currency = 'USD', interval = '1h',
       httr::user_agent(ua)
     )
     con <- httr::content(crypto_quotes)
-    if (length(con$data > 0)) {
+    if (length(con$data > 0) && length(con$data) != 6) {
       # convert to tidy DT
       market_data <- lapply(con$data, data.table::rbindlist)
       market_data <- data.table::rbindlist(market_data, idcol = TRUE)
@@ -46,6 +46,7 @@ get_crypto_quotes <- function(crypto_id = 1, currency = 'USD', interval = '1h',
                            c('datetime', 'price', 'vol', 'market_cap'))
       market_data[, `:=`(crypto_id = crypto_id, currency = currency)]
     } else {
+      print(paste0('Skip id ', crypto_id))
       market_data <- NULL
     }
     market_data
