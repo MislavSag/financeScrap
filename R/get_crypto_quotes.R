@@ -44,7 +44,8 @@ get_crypto_quotes <- function(crypto_id = 1, currency = 'USD', interval = '1h',
       data.table::setnames(market_data,
                            colnames(market_data),
                            c('datetime', 'price', 'vol', 'market_cap'))
-      market_data[, `:=`(crypto_id = crypto_id, currency = currency)]
+      market_data$crypto_id <- crypto_id
+      market_data$currency <- currency
     } else {
       print(paste0('Skip some data for id ', crypto_id))
       return(NULL)
@@ -53,4 +54,3 @@ get_crypto_quotes <- function(crypto_id = 1, currency = 'USD', interval = '1h',
   })
   return(data.table::rbindlist(market_data))
 }
-
