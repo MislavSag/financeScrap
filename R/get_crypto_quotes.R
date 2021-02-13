@@ -46,10 +46,12 @@ get_crypto_quotes <- function(crypto_id = 1, currency = 'USD', interval = '1h',
                            c('datetime', 'price', 'vol', 'market_cap'))
       market_data[, `:=`(crypto_id = crypto_id, currency = currency)]
     } else {
-      print(paste0('Skip id ', crypto_id))
-      market_data <- NULL
+      print(paste0('Skip some data for id ', crypto_id))
+      return(NULL)
     }
     market_data
   })
   return(data.table::rbindlist(market_data))
 }
+
+x <- get_crypto_quotes(78, 'USD','1h', time_start = as.Date('2015-01-01'), time_end = Sys.Date())
